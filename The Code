@@ -53,7 +53,7 @@ def adjust(red):
             temp.append(i)
             red.remove(i)
     for i in temp:
-        red.insert(m-1,i)
+        red.insert(rows-1,i)
     return red
 
 def equations(red):
@@ -92,20 +92,24 @@ def matrix_print(red):
     for i in red:
         print(i)
     print()
-m=4
-n=5
+
+
+rows=4
+columns=5
 L=[[1,2,1,2,10],[3,0,1,1,16],[1,2,-4,-1,5],[8,2,1,-2,45]]    #example input
-red=reduced_echelon(echelon(L,m,n), m, n)
-red=adjust(red)
-for i in red:
+reduced_matrix=reduced_echelon(echelon(L,rows,columns), rows, columns)
+reduced_matrix=adjust(reduced_matrix)
+
+#to round up decimal to 3 places
+for i in reduced_matrix:
     for j in range(len(i)):
         k=round(i[j],3)
         i[j]=k
-        
-#matrix_print(red)
+
       
-c=0
-for i in red:
+#to check if matrix is consistent or not
+count_of_inconsistent_rows=0
+for i in reduced_matrix:
     flag=True
     for j in range(len(i)):
         if i[j]!=0 and j!=len(i)-1:
@@ -113,12 +117,13 @@ for i in red:
     if flag:
         if i[-1]!=0:
             print("No solution")
-            c+=1
-if c==0:
+            count_of_inconsistent_rows+=1
+if count_of_inconsistent_rows==0:
+    #converts all decimal values to integers
+    reduced_matrix=func(reduced_matrix)
     
-    red=func(red)
-    
-    for i in red:
+    #converts the rows to its lowest form  (E.g 2 and 4 become 1 and 2)
+    for i in reduced_matrix:
         num1=i[0]
         num2=i[1]
         gcd=gcd1(num1,num2)
@@ -127,18 +132,22 @@ if c==0:
         for y in range(len(i)):
             if gcd!=0:
                 i[y]=int(i[y]/gcd)
-    #matrix_print(red)
-    
-    #equations(red)
-for i in red:
+
+
+#converting the pivots to 1
+for i in reduced_matrix:
     for j in range(len(i)):
-        if i[j]!=0 and i[j]!=1 and j!=n-1:
+        if i[j]!=0 and i[j]!=1 and j!=columns-1:
             f=i[j]
             for h in range(len(i)):
                 i[h]=i[h]/f
-for i in red:
+
+#converting decimals such as 1.0,2.0,3.0 to integers 1,2,3
+for i in reduced_matrix:
     for j in range(len(i)):
-        if i[j]==1:
+        if i[j]==int(i[j]):
             i[j]=int(i[j])
-matrix_print(red)
-equations(red)
+
+#display answers
+matrix_print(reduced_matrix)
+equations(reduced_matrix)
