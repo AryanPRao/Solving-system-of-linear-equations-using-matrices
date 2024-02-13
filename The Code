@@ -94,9 +94,14 @@ def matrix_print(red):
     print()
 
 
-rows=4
-columns=5
-L=[[1,2,1,2,10],[3,0,1,1,16],[1,2,-4,-1,5],[8,2,1,-2,45]]    #example input
+rows=int(input("No.of rows: "))
+columns=int(input("No.of columns: "))
+L=[]
+for i in range(rows):
+    s=input()
+    L1=[int(i) for i in s.split()]
+    L.append(L1)
+    L1=[]
 reduced_matrix=reduced_echelon(echelon(L,rows,columns), rows, columns)
 reduced_matrix=adjust(reduced_matrix)
 
@@ -136,11 +141,19 @@ if count_of_inconsistent_rows==0:
 
 #converting the pivots to 1
 for i in reduced_matrix:
-    for j in range(len(i)):
-        if i[j]!=0 and i[j]!=1 and j!=columns-1:
-            f=i[j]
-            for h in range(len(i)):
-                i[h]=i[h]/f
+        cou=0
+        for j in range(len(i)):
+            if i[j]==1 and j==0:
+                break
+            if i[j]==0:
+                cou+=1
+            if i[j]==1 and j==cou:
+                break
+            if i[j]!=0 and i[j]!=1 and j!=n-1:
+                f=i[j]
+                for h in range(len(i)):
+                    i[h]=i[h]/f
+                break
 
 #converting decimals such as 1.0,2.0,3.0 to integers 1,2,3
 for i in reduced_matrix:
